@@ -9,7 +9,6 @@ puslhaed = 40
 dalkar = 5
 radir = 4
 
-# Tómt púsl í neðra hægra horni
 tomur = (dalkar-1, radir-1)
 
 svartur = (0, 0, 0)
