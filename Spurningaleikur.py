@@ -38,7 +38,7 @@ class spurningaleikur:
 
     def spurningar_bord1(self, bord):
         self.bord = bord
-        print('þú ert kominn á borð 1')
+        print('Velkominn í fyrsta borð.\nTil að vinna borðið þarft þú að svara fjórum spurningum réttum. Ef það tekst ekki þá þarftu að byrja borðið að nýju\nGangi þér vel')
         self.spurningaleikurrun()
         #ef ekki gengur að svara spurningum
         #self.bord.tilbaka_inngangur()
@@ -48,6 +48,7 @@ class spurningaleikur:
         fjspurninga = 0
         stig=0
         fjspurninga=0
+
         for spurning in spurningar:
             svar = input(spurning.gisk)
             if svar == spurning.svar:
@@ -56,7 +57,8 @@ class spurningaleikur:
             if stig == 4:
                 print("Til hamingju! Þú náðir fjórum spurningum réttum og heldur því áfram í gegnum völundarhúsið.")
                 break
-        print("Þú náðir því miður ekki fjórum spurningum réttum og verður því að hefja leikinn aftur.")
+            if fjspurninga == 10:
+                print("Þú náðir því miður ekki fjórum spurningum réttum og verður því að hefja leikinn aftur.")
         spurningaleikur(spurningar)
 
 def main():
