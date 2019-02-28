@@ -33,11 +33,9 @@ class spurningaleikur:
     def __init__(self):
         self.gisk = 0
         self.svar = 0
-        self.bord=0
         print('smidur Spurningaleikur')
 
     def spurningar_bord1(self, bord):
-        self.bord = bord
         print('Velkominn í fyrsta borð.\nTil að vinna borðið þarft þú að svara fjórum spurningum réttum. Ef það tekst ekki þá þarftu að byrja borðið að nýju\nGangi þér vel')
         self.spurningaleikurrun()
         #ef ekki gengur að svara spurningum
@@ -46,8 +44,6 @@ class spurningaleikur:
     def spurningaleikurrun(self):
         stig = 0
         fjspurninga = 0
-        stig=0
-        fjspurninga=0
 
         for spurning in spurningar:
             svar = input(spurning.gisk)
