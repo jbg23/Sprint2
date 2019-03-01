@@ -22,7 +22,7 @@ lodrettur_rammi.fill(svartur)
 # load the image and divide up in tiles
 # putting borders on each tile also adds them to the full image
 mynd = pygame.image.load(myndaskra)
-pusl = {}
+pusluspil = {}
 for c in range(dalkar) :
     for r in range(radir) :
         pusl = mynd.subsurface (
@@ -30,15 +30,15 @@ for c in range(dalkar) :
             puslbreidd, puslhaed)
         pusluspil [(c, r)] = pusl
         if (c, r) != tomur:
-            tile.blit(larettur_rammi, (0, 0))
-            tile.blit(larettur_rammi, (0, puslhaed-1))
-            tile.blit(lodrettur_rammi, (0, 0))
-            tile.blit(lodrettur_rammi, (puslbreidd-1, 0))
+            pusl.blit(larettur_rammi, (0, 0))
+            pusl.blit(larettur_rammi, (0, puslhaed-1))
+            pusl.blit(lodrettur_rammi, (0, 0))
+            pusl.blit(lodrettur_rammi, (puslbreidd-1, 0))
             # make the corners a bit rounded
-            tile.set_at((1, 1), svartur)
-            tile.set_at((1, puslhaed-2), svartur)
-            tile.set_at((puslbreidd-2, 1), svartur)
-            tile.set_at((puslbreidd-2, puslhaed-2), svartur)
+            pusl.set_at((1, 1), svartur)
+            pusl.set_at((1, puslhaed-2), svartur)
+            pusl.set_at((puslbreidd-2, 1), svartur)
+            pusl.set_at((puslbreidd-2, puslhaed-2), svartur)
 pusluspil[tomur].fill(svartur)
 
 # keep track of which tile is in which position
