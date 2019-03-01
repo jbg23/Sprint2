@@ -2,10 +2,10 @@ import sys
 import random
 import pygame
 
-myndaskra = "mikkinyr.jpg"
-myndastaerd = (480, 360)
-puslbreidd = 96
-puslhaed = 72
+myndaskra = "mikkipusl.jpg"
+myndastaerd = (750, 500)
+puslbreidd = 150
+puslhaed = 100
 dalkar = 5
 radir = 5
 
@@ -59,10 +59,9 @@ pygame.display.flip()
 def skipti (d,r):
     global tomurD
     global tomurR
-    print('test1')
-    display.blit(pusl[stada[(d,r)]], tomurD*puslbreidd, tomurR*puslhaed)
-    print('test2')
-    #display.blit(pusl[tomur], (d*puslbreidd, r*puslhaed))
+#    print('window_stada:= ', stada[(d,r)])
+    display.blit(pusluspil[stada[(d,r)]], (tomurD*puslbreidd, tomurR*puslhaed))
+    display.blit(pusluspil[tomur], (d*puslbreidd, r*puslhaed))
     stada[(tomurD, tomurR)]=stada[(d,r)]
     stada[(d,r)] = tomur
     (tomurD, tomurR) = (d,r)
@@ -73,8 +72,8 @@ def rugla():
     global tomurD
     global tomurR
     sidastaR = 0
-    for i in range(75): #ATH 75?
-        pygame.time.delay(50)
+    for i in range(500): #ATH 75?
+        #pygame.time.delay(50)
         while True:
             #Veljum random átt til að færa púslin í.
             r=random.randint(1,4)
@@ -103,7 +102,7 @@ def main():
             pygame.quit()
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if byrjun: #Rugla eftir að ýtt er á mús í fyrsta sinn
+            if byrjun == True: #Rugla eftir að ýtt er á mús í fyrsta sinn
                 rugla()
                 byrjun = False
             elif event.dict['Hnappur'] == 1: #Ef ýtt á músina (vinstri), á púsl við hliðina á tómu púsli þá færist púslið.
@@ -123,6 +122,6 @@ def main():
             display.blit(vistud_mynd, (0, 0))
             pygame.display.flip()
             synilausn = False
-
+    #pygame.quit()
 if __name__ == "__main__":
     main()
