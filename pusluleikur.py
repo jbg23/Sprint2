@@ -4,13 +4,13 @@ import pygame
 
 myndaskra = "mikkipusl.jpg"
 myndastaerd = (750, 500)
-puslbreidd = 150
-puslhaed = 100
-dalkar = 5
-radir = 5
+puslbreidd = 250
+puslhaed = 166.666
+dalkar = 3
+radir = 3
 
 #Tómt, svart púsl í neðra hægra horni
-tomur = (dalkar-1, radir-1) #kemur þá í (5,1)
+tomur = (dalkar-1, radir-1) #kemur þá í (5,1), nei 5,5 segir birgir útaf það er hnitakerfið eins og þú lest það
 svartur = (0, 0, 0)
 
 #Rammi á hvert púsl
@@ -45,15 +45,9 @@ stada = {(dal, rad): (dal, rad)
 
 pygame.init()
 display = pygame.display.set_mode(myndastaerd)
-pygame.display.set_caption("Púslaðu Mikka!")
+pygame.display.set_caption("Púslaðu Mikka og félaga!")
 display.blit(mynd, (0, 0))
 pygame.display.flip()
-"""while True:
-    event = pygame.event.poll()
-    if event.type == pygame.QUIT:
-        pygame.quit()
-        sys.exit()
-    pygame.display.update()"""
 
 #Skipta á tóma púslinu og púsli (d,r)
 def skipti (d,r):
@@ -69,28 +63,11 @@ def skipti (d,r):
 
 #Rugla púslbitum
 def rugla():
-    global tomurD
-    global tomurR
-    sidastaR = 0
-    for i in range(500): #ATH 75?
-        #pygame.time.delay(50)
-        while True:
-            #Veljum random átt til að færa púslin í.
-            r=random.randint(1,4)
-            if(sidastaR + r == 5):
-                continue
-            if r == 1 and (tomurD>0):
-                skipti(tomurD-1, tomurR) #vinstri
-            elif r == 4 and (tomurD<0):
-                skipti(tomurD+1, tomurR) #hægri
-            elif r == 2 and (tomurR > 0):
-                skipti(tomurD, tomurR-1) #upp
-            elif r == 3 and (tomurR < radir-1):
-                skipti(tomurD, tomurR+1) #niður
-            else:
-                sidastaR = r
-                continue
-            break #Búið að rugla púslunum
+    global tomurD, tomurR
+    for i in range(50):
+        d = random.randint(0, dalkar-1)
+        r = random.randint(0, radir-1)
+        skipti(d,r)
 
 def main():
 #Hreyfa púsl með mús
@@ -105,18 +82,27 @@ def main():
             if byrjun == True: #Rugla eftir að ýtt er á mús í fyrsta sinn
                 rugla()
                 byrjun = False
-            elif event.dict['Hnappur'] == 1: #Ef ýtt á músina (vinstri), á púsl við hliðina á tómu púsli þá færist púslið.
-                mouse_pos = pygame.mouse.get_pos()
-                d = mouse_pos[0] / puslbreidd
-                r = mouse_pos[1] / puslhaed
-                if((abs(d-tomurD)==1 and r==tomurR)or (abs(r-tomurR) == 1 and d == tomurD)):
-                    skipti(d, r)
-            elif event.dict["Hnappur"] == 3:
+            else:
+                erSigur = 0
+                for i in range(0, dalkar):
+                    for j in range(0, radir):
+                        if stada[i,j] == (i,j):
+                            erSigur += 1
+                if erSigur == dalkar * radir:
+                    print("Þú vannst!")
+                    break
+                if event.button == 1: #Ef ýtt á músina (vinstri), á púsl við hliðina á tómu púsli þá færist púslið.
+                    mouse_pos = pygame.mouse.get_pos()
+                    d = int(mouse_pos[0] / puslbreidd)
+                    r = int(mouse_pos[1] / puslhaed)
+                    if((abs(d-tomurD)==1 and r==tomurR)or (abs(r-tomurR) == 1 and d == tomurD)):
+                        skipti(d, r)
+                elif event.button == 3:
                 #Hægri klikk, sýnir lausn myndar
-                vistud_mynd=display.copy()
-                display.blit(mynd, (0, 0))
-                pygame.display.flip()
-                synilausn = True
+                    vistud_mynd=display.copy()
+                    display.blit(mynd, (0, 0))
+                    pygame.display.flip()
+                    synilausn = True
         elif synilausn and (event.type == pygame.MOUSEBUTTONUP):
             #Hætta að sýna lausnina
             display.blit(vistud_mynd, (0, 0))
