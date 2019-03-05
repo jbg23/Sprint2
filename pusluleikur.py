@@ -5,9 +5,9 @@ import pygame
 myndaskra = "mikkipusl.jpg"
 myndastaerd = (750, 500)
 puslbreidd = 250
-puslhaed = 166.666
+puslhaed = 250
 dalkar = 3
-radir = 3
+radir = 2
 
 #Tómt, svart púsl í neðra hægra horni
 tomur = (dalkar-1, radir-1)
@@ -63,7 +63,6 @@ def skipti (d,r):
 
 #Rugla púslbitum
 def rugla():
-    global tomurD, tomurR
     for i in range(50):
         d = random.randint(0, dalkar-1)
         r = random.randint(0, radir-1)
