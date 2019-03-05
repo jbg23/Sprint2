@@ -10,12 +10,12 @@ dalkar = 3
 radir = 3
 
 #Tómt, svart púsl í neðra hægra horni
-tomur = (dalkar-1, radir-1) #kemur þá í (5,1), nei 5,5 segir birgir útaf það er hnitakerfið eins og þú lest það
+tomur = (dalkar-1, radir-1)
 svartur = (0, 0, 0)
 
 #Rammi á hvert púsl
 larettur_rammi = pygame.Surface((puslbreidd, 1))
-larettur_rammi.fill(svartur) #vitum ekki hvers vegna virkar ekki
+larettur_rammi.fill(svartur)
 lodrettur_rammi = pygame.Surface((1, puslhaed))
 lodrettur_rammi.fill(svartur)
 
@@ -24,7 +24,7 @@ mynd = pygame.image.load(myndaskra)
 pusluspil = {}
 for d in range(0, dalkar):
     for r in range(0, radir):
-        pusl = mynd.subsurface(d*puslbreidd, r*puslhaed, puslbreidd, puslhaed) #Ath, vitum ekki hvað seinni tveir gera
+        pusl = mynd.subsurface(d*puslbreidd, r*puslhaed, puslbreidd, puslhaed)
         pusluspil[(d,r)] = pusl
         if (d,r) != tomur:
             pusl.blit(larettur_rammi, (1, 1))
