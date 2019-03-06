@@ -3,60 +3,58 @@ import random
 import pygame
 
 myndaskra = "minamikki.jpg"
-myndastaerd = (200, 160)
-puslbreidd = 40
-puslhaed = 40
+myndastaerd = (640, 640)
+puslbreidd = 128
+puslhaed = 128
 dalkar = 5
-radir = 4
+radir = 5
 
-# Tómt púsl í neðra hægra horni
-tomur = (dalkar-1, radir-1)
-
+# Tómt púsl í neðra hægra horni sem er svart
+tomur = (dalkar, radir)
 svartur = (0, 0, 0)
 
-# horizontal and vertical borders for tiles
+# Set ramma á hvert púsl
 larettur_rammi = pygame.Surface((puslbreidd, 1))
 larettur_rammi.fill(svartur)
 lodrettur_rammi = pygame.Surface((1, puslhaed))
 lodrettur_rammi.fill(svartur)
 
-# load the image and divide up in tiles
-# putting borders on each tile also adds them to the full image
+# Set myndaskrána inn í breytuna mynd
 mynd = pygame.image.load(myndaskra)
-pusl = {}
-for c in range(dalkar) :
-    for r in range(radir) :
+pusluspil = {}
+for c in range(4) :
+    for r in range(4) :
         pusl = mynd.subsurface (
             c*puslbreidd, r*puslhaed,
             puslbreidd, puslhaed)
-        pusluspil [(c, r)] = pusl
+        pusluspil[(c, r)] = pusl
         if (c, r) != tomur:
-            tile.blit(larettur_rammi, (0, 0))
-            tile.blit(larettur_rammi, (0, puslhaed-1))
-            tile.blit(lodrettur_rammi, (0, 0))
-            tile.blit(lodrettur_rammi, (puslbreidd-1, 0))
-            # make the corners a bit rounded
-            tile.set_at((1, 1), svartur)
-            tile.set_at((1, puslhaed-2), svartur)
-            tile.set_at((puslbreidd-2, 1), svartur)
-            tile.set_at((puslbreidd-2, puslhaed-2), svartur)
+            pusl.blit(larettur_rammi, (0, 0))
+            pusl.blit(larettur_rammi, (0, puslhaed-1))
+            pusl.blit(lodrettur_rammi, (0, 0))
+            pusl.blit(lodrettur_rammi, (puslbreidd-1, 0))
+            #rúnuð horn
+            pusl.set_at((1, 1), svartur)
+            pusl.set_at((1, puslhaed-2), svartur)
+            pusl.set_at((puslbreidd-2, 1), svartur)
+            pusl.set_at((puslbreidd-2, puslhaed-2), svartur)
 pusluspil[tomur].fill(svartur)
 
-# keep track of which tile is in which position
+# hvaða púsl er í hvaða stöðu
 stadan = {(col, row): (col, row)
             for col in range(dalkar) for row in range(radir)}
 
-# keep track of the position of the empty tyle
+# hvar er tóma púslið
 (emptyc, emptyr) = tomur
 
-# start game and display the completed puzzle
+# hefja leik
 pygame.init()
 display = pygame.display.set_mode(myndastaerd)
 pygame.display.set_caption("shift-puzzle")
-display.blit (image, (0, 0))
+display.blit (mynd, (0, 0))
 pygame.display.flip()
 
-# swap a tile (c, r) with the neighbouring (emptyc, emptyr) tile
+# víxla púslum (c, r) við púslið við hliðina
 def shift (c, r) :
     global emptyc, emptyr
     display.blit(
@@ -70,7 +68,7 @@ def shift (c, r) :
     (emptyc, emptyr) = (c, r)
     pygame.display.flip()
 
-# shuffle the puzzle by making some random shift moves
+# hræri í púsluspilinu með random skiptingum
 def shuffle() :
     global emptyc, emptyr
     # keep track of last shuffling direction to avoid "undo" shuffle moves
@@ -99,19 +97,19 @@ def shuffle() :
             last_r=r
             break # a shuffling move was made
 
-# process mouse clicks
-at_start = True
-showing_solution = False
+# músaklikk
+byrjunarstada = True
+lausn = False
 while True:
     event = pygame.event.wait()
     if event.type == pygame.QUIT:
         pygame.quit()
         sys.exit()
     elif event.type == pygame.MOUSEBUTTONDOWN :
-        if at_start:
+        if byrjunarstada:
             # shuffle after the first mouse click
             shuffle()
-            at_start = False
+            byrjunarstada = False
         elif event.dict['button'] == 1:
             # mouse left button: move if next to the empty tile
             mouse_pos = pygame.mouse.get_pos()
@@ -123,11 +121,11 @@ while True:
         elif event.dict['button'] == 3:
             # mouse right button: show solution image
             saved_image = display.copy()
-            display.blit(image, (0, 0))
+            display.blit(mynd, (0, 0))
             pygame.display.flip()
-            showing_solution = True
-    elif showing_solution and (event.type == pygame.MOUSEBUTTONUP):
+            lausn = True
+    elif lausn and (event.type == pygame.MOUSEBUTTONUP):
         # stop showing the solution
         display.blit (saved_image, (0, 0))
         pygame.display.flip()
-        showing_solution = False
+        lausn = False
