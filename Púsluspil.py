@@ -2,6 +2,7 @@ import sys
 import random
 import pygame
 
+<<<<<<< HEAD
 myndaskra = "minamikki.jpg"
 myndastaerd = (640, 640)
 puslbreidd = 128
@@ -46,10 +47,58 @@ stadan = {(col, row): (col, row)
 
 # hvar er tóma púslið
 (emptyc, emptyr) = tomur
+=======
+IMAGE_FILE = "mikkipusl.jpg"
+IMAGE_SIZE = (750, 500)
+TILE_WIDTH = 187.5
+TILE_HEIGHT = 166.67
+COLUMNS = 4
+ROWS = 3
+
+# bottom right corner contains no tile
+EMPTY_TILE = (COLUMNS-1, ROWS-1)
+
+BLACK = (0, 0, 0)
+
+# horizontal and vertical borders for tiles
+hor_border = pygame.Surface((TILE_WIDTH, 1))
+hor_border.fill(BLACK)
+ver_border = pygame.Surface((1, TILE_HEIGHT))
+ver_border.fill(BLACK)
+
+# load the image and divide up in tiles
+# putting borders on each tile also adds them to the full image
+image = pygame.image.load(IMAGE_FILE)
+tiles = {}
+for c in range(COLUMNS) :
+    for r in range(ROWS) :
+        tile = image.subsurface (
+            c*TILE_WIDTH, r*TILE_HEIGHT,
+            TILE_WIDTH, TILE_HEIGHT)
+        tiles [(c, r)] = tile
+        if (c, r) != EMPTY_TILE:
+            tile.blit(hor_border, (0, 0))
+            tile.blit(hor_border, (0, TILE_HEIGHT-1))
+            tile.blit(ver_border, (0, 0))
+            tile.blit(ver_border, (TILE_WIDTH-1, 0))
+            # make the corners a bit rounded
+            tile.set_at((1, 1), BLACK)
+            tile.set_at((1, TILE_HEIGHT-2), BLACK)
+            tile.set_at((TILE_WIDTH-2, 1), BLACK)
+            tile.set_at((TILE_WIDTH-2, TILE_HEIGHT-2), BLACK)
+tiles[EMPTY_TILE].fill(BLACK)
+
+# keep track of which tile is in which position
+state = {(col, row): (col, row)
+            for col in range(COLUMNS) for row in range(ROWS)}
+
+# keep track of the position of the empty tyle
+(emptyc, emptyr) = EMPTY_TILE
+>>>>>>> eecef75704e522fa3892296b6f66cff0a57f8472
 
 # hefja leik
 pygame.init()
-display = pygame.display.set_mode(myndastaerd)
+display = pygame.display.set_mode(IMAGE_SIZE)
 pygame.display.set_caption("shift-puzzle")
 display.blit (mynd, (0, 0))
 pygame.display.flip()
@@ -58,13 +107,13 @@ pygame.display.flip()
 def shift (c, r) :
     global emptyc, emptyr
     display.blit(
-        pusluspil[stadan[(c, r)]],
-        (emptyc*puslbreidd, emptyr*puslhaed))
+        tiles[state[(c, r)]],
+        (emptyc*TILE_WIDTH, emptyr*TILE_HEIGHT))
     display.blit(
-        pusluspil[tomur],
-        (c*puslbreidd, r*puslhaed))
-    stadan[(emptyc, emptyr)] = stadan[(c, r)]
-    stadan[(c, r)] = tomur
+        tiles[EMPTY_TILE],
+        (c*TILE_WIDTH, r*TILE_HEIGHT))
+    state[(emptyc, emptyr)] = state[(c, r)]
+    state[(c, r)] = EMPTY_TILE
     (emptyc, emptyr) = (c, r)
     pygame.display.flip()
 
@@ -85,11 +134,11 @@ def shuffle() :
                 continue
             if r == 1 and (emptyc > 0):
                 shift(emptyc - 1, emptyr) # shift left
-            elif r == 4 and (emptyc < dalkar - 1):
+            elif r == 4 and (emptyc < COLUMNS - 1):
                 shift(emptyc + 1, emptyr) # shift right
             elif r == 2 and (emptyr > 0):
                 shift(emptyc, emptyr - 1) # shift up
-            elif r == 3 and (emptyr < radir - 1):
+            elif r == 3 and (emptyr < ROWS - 1):
                 shift(emptyc, emptyr + 1) # shift down
             else:
                 # the random shuffle move didn't fit in that direction
@@ -113,8 +162,8 @@ while True:
         elif event.dict['button'] == 1:
             # mouse left button: move if next to the empty tile
             mouse_pos = pygame.mouse.get_pos()
-            c = mouse_pos[0] / puslbreidd
-            r = mouse_pos[1] / puslhaed
+            c = mouse_pos[0] / TILE_WIDTH
+            r = mouse_pos[1] / TILE_HEIGHT
             if (    (abs(c-emptyc) == 1 and r == emptyr) or
                     (abs(r-emptyr) == 1 and c == emptyc)):
                 shift (c, r)
